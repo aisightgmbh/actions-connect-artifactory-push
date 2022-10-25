@@ -1,0 +1,21 @@
+name: Tests
+on: [push]
+
+jobs:
+  test-on-custom-runner:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aisightgmbh/actions-connect-artifactory-push@master
+        with:
+          artifactory-owner: ${{ secrets.ARTIFACTORY_OWNER }}
+          artifactory-domain: ${{ secrets.ARTIFACTORY_DOMAIN }}
+          artifactory-name: ${{ secrets.ARTIFACTORY_NAME }}
+      - name: Fail if url empty
+        if: ${{ env.POETRY_REPOSITORIES_PUBLISH_URL == '' }}
+        run: exit 1
+      - name: Fail if password empty
+        if: ${{ env.POETRY_HTTP_BASIC_PUBLISH_PASSWORD == '' }}
+        run: exit 1
+      - name: Fail if username not aws
+        if: ${{ env.POETRY_HTTP_BASIC_PUBLISH_USERNAME != 'aws' }}
+        run: exit 1

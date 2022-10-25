@@ -1,0 +1,30 @@
+name: "connect artifactory push"
+description: "Create the credentials to connect Poetry to AWS CodeArtifact"
+inputs:
+  artifactory-owner:
+    description: "owner of AWS CodeArtifact artifactory"
+    required: true
+  artifactory-domain:
+    description: "domain of AWS CodeArtifact artifactory"
+    required: true
+  install-aws:
+    description: "whether to install the AWS CLI"
+    default: "true"
+runs:
+  using: "composite"
+  steps:
+    - name: Install AWS CLI
+      if: ${{ inputs.install-aws == 'true' }}
+      uses: aisightgmbh/actions-install-aws@v2
+
+    - name: Create url
+      run: echo "POETRY_REPOSITORIES_PUBLISH_URL=$(aws codeartifact get-repository-endpoint --domain-owner ${{ inputs.artifactory-owner }} --domain ${{ inputs.artifactory-domain }} --repository ${{ inputs.artifactory-name }} --format pypi --query 'repositoryEndpoint' --output text)"
+      shell: bash
+
+    - name: Create username
+      run: echo "POETRY_HTTP_BASIC_PUBLISH_USERNAME=aws" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Create password
+      run: echo "POETRY_HTTP_BASIC_PUBLISH_PASSWORD=$(aws codeartifact get-authorization-token --domain-owner ${{ inputs.artifactory-owner }} --domain ${{ inputs.artifactory-domain }} --query 'authorizationToken' --output text)" >> $GITHUB_ENV
+      shell: bash
