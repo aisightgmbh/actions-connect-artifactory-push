@@ -18,7 +18,7 @@ runs:
       uses: aisightgmbh/actions-install-aws@v2
 
     - name: Create url
-      run: echo "POETRY_REPOSITORIES_PUBLISH_URL=$(aws codeartifact get-repository-endpoint --domain-owner ${{ inputs.artifactory-owner }} --domain ${{ inputs.artifactory-domain }} --repository ${{ inputs.artifactory-name }} --format pypi --query 'repositoryEndpoint' --output text)"
+      run: echo "POETRY_REPOSITORIES_PUBLISH_URL=$(aws codeartifact get-repository-endpoint --domain-owner ${{ inputs.artifactory-owner }} --domain ${{ inputs.artifactory-domain }} --repository ${{ inputs.artifactory-name }} --format pypi --query 'repositoryEndpoint' --output text)" >> $GITHUB_ENV
       shell: bash
 
     - name: Create username
