@@ -3,6 +3,7 @@ on: [push]
 
 jobs:
   test-on-custom-runner:
+    runs-on: custom-organization-runner
     steps:
       - uses: actions/checkout@v3
       - uses: aisightgmbh/actions-connect-artifactory-push@master

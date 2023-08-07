@@ -7,6 +7,9 @@ inputs:
   artifactory-domain:
     description: "domain of AWS CodeArtifact artifactory"
     required: true
+  artifactory-name:
+    description: "name of AWS CodeArtifact artifactory"
+    required: true
   install-aws:
     description: "whether to install the AWS CLI"
     default: "true"
